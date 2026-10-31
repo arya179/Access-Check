@@ -296,7 +296,7 @@ Return a valid JSON object matching this schema:
 If all sentences are grammatically sound, consistent, and clear, return {{"findings": []}}.
 """
         try:
-            parsed = await ai_client.generate_json(prompt, timeout=25.0)
+            parsed = await ai_client.generate_json(prompt, timeout=12.0)
             ai_findings = []
             for item in parsed.get("findings", []):
                 ai_findings.append({

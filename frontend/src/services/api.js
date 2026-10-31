@@ -30,7 +30,7 @@ export class ApiError extends Error {
 class ApiService {
   constructor(baseUrl = API_BASE) {
     this.baseUrl = baseUrl;
-    this.defaultTimeoutMs = 60000;
+    this.defaultTimeoutMs = 120000;
     // In-flight GET request deduplication cache
     this._inFlightRequests = new Map();
   }
@@ -195,7 +195,7 @@ class ApiService {
     return this.request('/api/scan', {
       method: 'POST',
       body: JSON.stringify(payload),
-      timeout: this.defaultTimeoutMs,
+      timeout: 120000,
       ...options
     });
   }

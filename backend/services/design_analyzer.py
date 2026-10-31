@@ -33,7 +33,7 @@ class DesignAnalyzer:
         """
         # 1. Desktop evaluation & deep typography / layout inspection
         await page.set_viewport_size(VIEWPORTS["desktop"])
-        await page.wait_for_timeout(400)
+        await page.wait_for_timeout(100)
 
         desktop_metrics = await page.evaluate("""() => {
             const docWidth = document.documentElement.scrollWidth;
@@ -137,7 +137,7 @@ class DesignAnalyzer:
 
         # 2. Tablet Responsive Check (768px)
         await page.set_viewport_size(VIEWPORTS["tablet"])
-        await page.wait_for_timeout(350)
+        await page.wait_for_timeout(100)
         tablet_metrics = await page.evaluate("""() => {
             const docWidth = document.documentElement.scrollWidth;
             const viewWidth = window.innerWidth;
@@ -150,7 +150,7 @@ class DesignAnalyzer:
 
         # 3. Mobile Responsive Check (375px)
         await page.set_viewport_size(VIEWPORTS["mobile"])
-        await page.wait_for_timeout(350)
+        await page.wait_for_timeout(100)
         mobile_metrics = await page.evaluate("""() => {
             const docWidth = document.documentElement.scrollWidth;
             const viewWidth = window.innerWidth;
@@ -424,7 +424,7 @@ Return a valid JSON object matching this schema:
 If no design issues are apparent from this data, return {{"findings": []}}.
 """
         try:
-            parsed = await ai_client.generate_json(prompt, timeout=25.0)
+            parsed = await ai_client.generate_json(prompt, timeout=12.0)
             ai_findings = []
             for item in parsed.get("findings", []):
                 ai_findings.append({

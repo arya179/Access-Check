@@ -28,8 +28,8 @@ class AccessibilityScanner:
     def __init__(
         self,
         max_concurrency: int = 3,
-        navigation_timeout_ms: int = 40000,
-        axe_timeout_ms: int = 25000,
+        navigation_timeout_ms: int = 20000,
+        axe_timeout_ms: int = 15000,
         axe_script_path: str = AXE_ASSET_PATH
     ):
         self.semaphore = asyncio.Semaphore(max_concurrency)

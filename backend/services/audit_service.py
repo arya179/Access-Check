@@ -52,30 +52,6 @@ class AuditService:
 
         # 3. Design Intelligence & Responsive Analysis
         design_analysis = scan_results.get("design_analysis", {})
-        if generate_ai and design_analysis:
-            # Augment with Gemma 4 design intelligence if AI is enabled
-            from backend.services.design_analyzer import design_analyzer
-            try:
-                measurements = {
-                    "desktop": {
-                        "hasHorizontalOverflow": design_analysis.get("measurements_summary", {}).get("has_desktop_overflow", False),
-                        "headings": [{"level": 1, "text": "Page Heading"}],
-                        "fontFamilies": design_analysis.get("measurements_summary", {}).get("font_families", []),
-                        "buttonCount": design_analysis.get("measurements_summary", {}).get("button_count", 0),
-                        "smallTargetsCount": design_analysis.get("measurements_summary", {}).get("small_targets_count", 0)
-                    },
-                    "tablet": {"hasHorizontalOverflow": design_analysis.get("measurements_summary", {}).get("has_tablet_overflow", False)},
-                    "mobile": {
-                        "hasHorizontalOverflow": design_analysis.get("measurements_summary", {}).get("has_mobile_overflow", False),
-                        "subStandardTargets": 0
-                    }
-                }
-                ai_design_findings = await design_analyzer.analyze_with_gemma_ai(measurements, url)
-                if ai_design_findings:
-                    design_analysis["findings"].extend(ai_design_findings)
-                    design_analysis["total_design_findings"] = len(design_analysis["findings"])
-            except Exception as e:
-                pass
 
         # 4. Gemma 4 AI remediation
         ai_data = {"ai_summary": None, "remediations": {}}
