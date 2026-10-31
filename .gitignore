@@ -1,0 +1,42 @@
+# Virtual Environment
+venv/
+.venv/
+env/
+
+# Environment Variables & Secrets
+.env
+**/.env
+*.local
+
+# Python cache & artifacts
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.sqlite
+*.sqlite3
+*.db
+
+# Node & Frontend Build
+node_modules/
+**/node_modules/
+dist/
+**/dist/
+.vite/
+**/.vite/
+
+# Graphify & Diagnostics
+graphify-out/
+.pytest_cache/
+test-results/
+
+# OS Specific
+.DS_Store
+Thumbs.db
+
+.pytest_cache/
+test-results/
+
+# OS Specific
+.DS_Store
+Thumbs.db
