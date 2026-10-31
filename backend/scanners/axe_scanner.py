@@ -186,6 +186,14 @@ class AccessibilityScanner:
                         return results.slice(0, 40); // Cap at 40 rich elements per page
                     }""")
 
+                    # 6. Design and Responsive Measurements
+                    from backend.services.design_analyzer import design_analyzer
+                    design_results = await design_analyzer.analyze_website_design(
+                        page=page,
+                        url=clean_url,
+                        enable_ai=False # Performed downstream in audit_service if requested
+                    )
+
                     critical_count = 0
                     serious_count = 0
                     moderate_count = 0
@@ -261,6 +269,7 @@ class AccessibilityScanner:
                         "incomplete_count": len(incomplete),
                         "inapplicable_count": len(inapplicable),
                         "extracted_text_elements": extracted_text_elements,
+                        "design_analysis": design_results,
                         "screenshot_b64": screenshot_b64
                     }
 

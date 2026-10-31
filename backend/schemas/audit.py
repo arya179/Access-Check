@@ -49,6 +49,7 @@ class AuditResult(BaseModel):
     ai_remediations: Dict[str, str] = {}
     screenshot_b64: Optional[str] = None
     content_quality: Optional[Dict[str, Any]] = None
+    design_analysis: Optional[Dict[str, Any]] = None
     graph_data: Optional[Dict[str, Any]] = None
 
 class AuditSummary(BaseModel):
