@@ -4,7 +4,7 @@ from typing import List, Optional, Dict, Any
 class ScanRequest(BaseModel):
     url: str = Field(..., description="The full URL of the website to audit")
     tags: Optional[List[str]] = Field(default=["wcag2a", "wcag2aa", "wcag21a", "wcag21aa"], description="WCAG standards tags to run")
-    generate_ai_remediation: Optional[bool] = Field(default=True, description="Whether to invoke Gemini/Gemma for automated fixes")
+    generate_ai_remediation: Optional[bool] = Field(default=True, description="Whether to invoke Gemma 4 for automated fixes")
     model_override: Optional[str] = Field(default=None, description="Optional custom AI model identifier (e.g. gemma-4-26b-a4b-it)")
     capture_screenshot: Optional[bool] = Field(default=False, description="Whether to capture a masked screenshot for multimodal visual accessibility analysis")
     content_language: Optional[str] = Field(default="en", description="Target website content language for spell and grammar checker (default: en)")

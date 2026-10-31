@@ -26,7 +26,7 @@ export default function SettingsPage({
       <div>
         <h2 className="text-2xl font-bold tracking-tight">Platform Configuration</h2>
         <p className="text-sm text-slate-400 mt-1">
-          Manage AI model endpoints, Google Gemini credentials, themes, and persistence layers.
+          Manage AI model endpoints, Google GenAI credentials, themes, and persistence layers.
         </p>
       </div>
 
@@ -37,58 +37,33 @@ export default function SettingsPage({
         }`}>
           <div className="flex items-center gap-2 mb-4">
             <Sparkles className="w-5 h-5 text-indigo-400" />
-            <h3 className="text-base font-bold">Google Gemini AI Engine</h3>
+            <h3 className="text-base font-bold">Google Gemma 4 AI Engine</h3>
           </div>
 
-          <form onSubmit={handleSave} className="space-y-4">
+          <div className="space-y-4">
             <div>
               <label className="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-1.5">
-                Active Gemini / Gemma Model
+                Active AI Model
               </label>
-              <select
-                value={selectedModel}
-                onChange={(e) => setSelectedModel(e.target.value)}
-                className={`w-full rounded-2xl px-4 py-3 text-xs border focus:outline-none focus:ring-2 focus:ring-indigo-500 ${
-                  theme === 'dark' ? 'bg-slate-950 border-slate-800 text-white' : 'bg-slate-50 border-slate-300 text-slate-900'
-                }`}
-              >
-                <option value="gemma-4-26b-a4b-it">gemma-4-26b-a4b-it (Configured Gemma 4 Model)</option>
-                <option value="gemini-2.5-flash">gemini-2.5-flash (Fast, Low Latency, Recommended)</option>
-                <option value="gemini-1.5-pro">gemini-1.5-pro (Complex Reasoning & Deep DOM Context)</option>
-              </select>
-            </div>
-
-            <div>
-              <label className="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-1.5">
-                Google Gemini API Key
-              </label>
-              <div className="relative">
-                <Key className="w-4 h-4 text-slate-500 absolute left-4 top-3.5" />
-                <input
-                  type="password"
-                  placeholder="AIzaSy... (configured in .env)"
-                  value={apiKey}
-                  onChange={(e) => setApiKey(e.target.value)}
-                  className={`w-full rounded-2xl pl-11 pr-4 py-3 text-xs border focus:outline-none focus:ring-2 focus:ring-indigo-500 ${
-                    theme === 'dark' ? 'bg-slate-950 border-slate-800 text-white' : 'bg-slate-50 border-slate-300 text-slate-900'
-                  }`}
-                />
+              <div className={`w-full rounded-2xl px-4 py-3 text-xs border font-medium ${
+                theme === 'dark' ? 'bg-slate-950 border-slate-800 text-white' : 'bg-slate-50 border-slate-300 text-slate-900'
+              }`}>
+                gemma-4-26b-a4b-it (Google Gemma 4 Challenge Model)
               </div>
               <p className="text-[11px] text-slate-400 mt-1">
-                Keys should be securely set in your backend <code className="font-mono text-indigo-400">.env</code> file.
+                Configured as single source of truth via <code className="font-mono text-indigo-400">GEMMA_MODEL</code> on the backend.
               </p>
             </div>
 
-            <div className="pt-2">
-              <button
-                type="submit"
-                className="px-5 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-semibold flex items-center gap-1.5 shadow-md shadow-indigo-600/20"
-              >
-                {saved ? <Check className="w-4 h-4 text-emerald-400" /> : <Settings className="w-4 h-4" />}
-                <span>{saved ? 'Preferences Updated' : 'Save AI Preferences'}</span>
-              </button>
+            <div>
+              <label className="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-1.5">
+                Google GenAI API Authentication
+              </label>
+              <p className="text-[11px] text-slate-400">
+                Managed securely on the backend via <code className="font-mono text-indigo-400">GEMINI_API_KEY</code>. Client-side key exposure is completely prevented.
+              </p>
             </div>
-          </form>
+          </div>
         </div>
 
         {/* System & Architecture Status */}

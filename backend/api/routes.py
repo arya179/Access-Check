@@ -142,17 +142,17 @@ async def get_markdown_report(audit_id: str):
 
 @router.get("/api/ai/status")
 async def get_ai_status():
-    """Returns the operational status of configured Gemma and Gemini models without exposing credentials."""
+    """Phase 7: Returns verified operational status of Gemma 4 without exposing secrets."""
     return ai_client.get_status()
 
 @router.post("/api/ai/ping")
-async def ping_ai_endpoint(model: Optional[str] = Query(default=None)):
-    """Pings the target model using a real lightweight API request to verify quota and credentials."""
-    return await ai_client.ping_model(model)
+async def ping_ai_endpoint():
+    """Phase 7: Pings Gemma 4 with a real API request; only marks connected on genuine success."""
+    return await ai_client.ping_model()
 
 @router.post("/api/ai/explain", response_model=ExplainResponse)
 async def explain_violation_endpoint(request: ExplainRequest):
-    """Features A, B, C: Generates structured explanation, HTML fix, and CSS fix using configured Gemma 4 / Gemini."""
+    """Features A, B, C: Generates structured explanation, HTML fix, and CSS fix using Gemma 4."""
     try:
         return await gemma_service.explain_violation(request)
     except Exception as e:
@@ -225,7 +225,7 @@ async def visual_analysis_endpoint(request: VisualAnalysisRequest):
             visual_quality_score=result.get("visual_quality_score", 85),
             visual_findings=result.get("visual_findings", []),
             disability_assessment=result.get("disability_assessment", "Visual layout conforms to standard criteria."),
-            model_used=request.model_override or settings.GEMINI_MODEL
+            model_used=settings.GEMMA_MODEL
         )
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Visual AI analysis failed: {str(e)}")

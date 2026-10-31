@@ -222,7 +222,7 @@ class ReportExporter:
         # 4. Executive AI Summary
         ai_summary = scan_data.get("ai_summary")
         if ai_summary:
-            story.append(Paragraph("Google Gemini AI Executive Evaluation", h2_style))
+            story.append(Paragraph("Gemma 4 AI Executive Evaluation", h2_style))
             ai_p = Paragraph(f"<i>{xml_escape(ai_summary)}</i>", body_style)
             ai_box = Table([[ai_p]], colWidths=[7.0 * inch])
             ai_box.setStyle(TableStyle([

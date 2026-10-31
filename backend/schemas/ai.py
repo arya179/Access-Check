@@ -11,7 +11,7 @@ class ExplainRequest(BaseModel):
     sample_html: Optional[str] = Field(default="", description="Offending HTML code snippet extracted from page DOM")
     css_selector: Optional[str] = Field(default="", description="Target CSS selector identifying DOM element")
     failure_summary: Optional[str] = Field(default="", description="Axe-core node check failure summary")
-    model_override: Optional[str] = Field(default=None, description="Optional model override: gemma-4-26b-a4b-it, gemini-2.5-flash")
+    model_override: Optional[str] = Field(default=None, description="Active Gemma model (gemma-4-26b-a4b-it)")
 
 class ExplainResponse(BaseModel):
     rule_id: str

@@ -2,7 +2,7 @@ import uuid
 from datetime import datetime
 from typing import Dict, Any, List, Optional
 from backend.scanners.axe_scanner import AccessibilityScanner
-from backend.ai.gemini import GeminiRemediator
+from backend.ai.gemini import GemmaRemediator
 from backend.analytics.visualizer import AccessibilityAnalytics
 from backend.analytics.graphify_tracker import GraphifyTracker
 from backend.services.spell_checker import ContentQualityScanner
@@ -11,7 +11,7 @@ from backend.models.database import db
 class AuditService:
     def __init__(self):
         self.scanner = AccessibilityScanner()
-        self.remediator = GeminiRemediator()
+        self.remediator = GemmaRemediator()
 
     async def run_audit(
         self,
@@ -27,7 +27,7 @@ class AuditService:
         Executes complete end-to-end accessibility and content quality evaluation:
         1. Playwright + axe-core real website scan + DOM text extraction
         2. Content quality scanner (spell checking, repeated words, placeholder text, Gemma grammar)
-        3. Gemini/Gemma automated remediation generation
+        3. Gemma 4 automated remediation generation
         4. Plotly interactive charts construction
         5. Persistent storage to SQLite
         """
@@ -50,7 +50,7 @@ class AuditService:
             enable_ai_grammar=enable_ai_grammar
         )
 
-        # 2. AI remediation
+        # 3. Gemma 4 AI remediation
         ai_data = {"ai_summary": None, "remediations": {}}
         if generate_ai and scan_results["violations"]:
             ai_data = await self.remediator.generate_remediations(

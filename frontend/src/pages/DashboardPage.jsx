@@ -71,7 +71,7 @@ export default function DashboardPage({
             </span>
           </h2>
           <p className="mt-3 text-sm sm:text-base text-slate-300 leading-relaxed">
-            Run genuine Chromium and Deque Axe-core tests against web applications, uncover exact failing HTML nodes, and receive instantaneous Google Gemini code fixes.
+            Run genuine Chromium and Deque Axe-core tests against web applications, uncover exact failing HTML nodes, and receive instantaneous Google Gemma 4 code fixes.
           </p>
 
           <form onSubmit={handleQuickSubmit} className="mt-6 flex flex-col sm:flex-row gap-3">

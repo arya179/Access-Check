@@ -106,23 +106,14 @@ export default function Header({
           )}
         </div>
 
-        {/* AI Model selector with accessible aria-label */}
+        {/* AI Model selector */}
         <div className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl border text-xs ${
           theme === 'dark'
             ? 'bg-slate-900 border-slate-800 text-slate-300'
             : 'bg-slate-100 border-slate-200 text-slate-700'
         }`}>
           <Sparkles className="w-3.5 h-3.5 text-indigo-400" aria-hidden="true" />
-          <select
-            value={selectedModel}
-            onChange={(e) => onModelChange(e.target.value)}
-            aria-label="Select Google Gemini Model"
-            className="bg-transparent border-none text-xs focus:outline-none cursor-pointer pr-1 text-slate-200"
-          >
-            <option value="gemma-4-26b-a4b-it" className="bg-slate-900 text-slate-200">Gemma 4 (26B)</option>
-            <option value="gemini-2.5-flash" className="bg-slate-900 text-slate-200">Gemini 2.5 Flash</option>
-            <option value="gemini-1.5-pro" className="bg-slate-900 text-slate-200">Gemini 1.5 Pro</option>
-          </select>
+          <span className="font-semibold text-slate-300">Gemma 4 (26B)</span>
         </div>
 
         {/* Theme toggle */}

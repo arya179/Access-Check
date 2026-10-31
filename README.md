@@ -1,8 +1,8 @@
 # AccessCheck AI 🌐♿
 
-**AccessCheck AI** is an AI-powered enterprise website accessibility auditing platform that combines headless Google Chrome automation with Deque's Axe-core and Google Gemini AI (`google-genai`).
+**AccessCheck AI** is an AI-powered enterprise website accessibility and content quality auditing platform that combines headless Google Chrome automation with Deque's Axe-core and Google's Gemma 4 model (`gemma-4-26b-a4b-it`) via the official Google GenAI SDK (`google-genai`).
 
-AccessCheck AI audits real DOM elements, calculates algorithmic scores, visualizes compliance distributions with Plotly, stores persistent audits in SQLite, generates ReportLab PDF compliance certificates, and uses Google Gemini to explain violations and produce before/after code fixes.
+AccessCheck AI audits real DOM elements, calculates algorithmic scores, visualizes compliance distributions with Plotly, stores persistent audits in SQLite, generates ReportLab PDF compliance certificates, and uses Gemma 4 to explain violations, produce before/after code fixes, and perform contextual content quality analysis.
 
 ---
 
@@ -12,11 +12,14 @@ AccessCheck AI audits real DOM elements, calculates algorithmic scores, visualiz
    - Launches existing Google Chrome (`channel="chrome"`, `headless=True`).
    - Uses local bundled `axe.min.js` (zero dependency on external CDNs).
    - Strict SSRF and private IP protection (`backend/scanners/security.py`).
-2. **Google Gemini Remediation (`POST /api/ai/explain`)**:
-   - Official `google-genai` Python SDK integration reading credentials from `.env`.
+2. **Google Gemma 4 Remediation (`POST /api/ai/explain`)**:
+   - Official `google-genai` Python SDK integration configured strictly with `GEMMA_MODEL=gemma-4-26b-a4b-it`.
    - Structured JSON output with disability impacts, technical causes, implementation steps, and before/after HTML snippets.
    - Built-in timeout, retries, and authoritative axe documentation fallback.
-3. **Interactive Visualizations & Analytics**:
+3. **Contextual Content Quality & Spell Scanner**:
+   - Hybrid dictionary-based spelling engine combined with Gemma 4 contextual grammar verification.
+   - Identifies grammatical errors, placeholder text (e.g. "Lorem ipsum"), repeated words, and confusing instructions.
+   - Scanned text is treated as untrusted input with strict prompt injection sanitization.
    - Plotly.js charts (score gauge, severity donut, moving average score trajectory, WCAG principles distribution, and cross-website comparison).
    - PNG export functionality for reports and presentations.
 4. **Persistent Relational SQLite Storage**:
@@ -93,8 +96,8 @@ AccessCheck-AI/
 | `HOST` | Bind host address | `0.0.0.0` |
 | `ENVIRONMENT` | Environment mode (`development` or `production`) | `development` |
 | `FRONTEND_URL` | Allowed origin for production CORS policy | `http://localhost:5173` |
-| `GEMINI_API_KEY` | Google AI Studio API key for Gemini remediation | `""` (Falls back cleanly) |
-| `GEMINI_MODEL` | Google Gemini model identifier | `gemini-2.5-flash` |
+| `GEMINI_API_KEY` | Google AI Studio API key for Google GenAI SDK | `""` (Falls back cleanly) |
+| `GEMMA_MODEL` | Google Gemma 4 model identifier | `gemma-4-26b-a4b-it` |
 | `DATABASE_PATH` | Local SQLite database file location | `accesscheck.db` |
 
 ### Frontend (`frontend/.env`)

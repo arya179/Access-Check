@@ -79,7 +79,7 @@ export default function AiFixAssistantPage({
         <Bot className="w-16 h-16 text-indigo-400 mx-auto mb-4 opacity-50" />
         <h3 className="text-lg font-bold">No Audit Data for Remediation</h3>
         <p className="text-sm text-slate-400 mt-2">
-          Run an accessibility scan to activate the Google Gemini AI code remediation assistant.
+          Run an accessibility scan to activate the Google Gemma 4 AI code remediation assistant.
         </p>
         <button
           onClick={() => onNavigate('new-scan')}
@@ -103,7 +103,7 @@ export default function AiFixAssistantPage({
           <div>
             <div className="flex items-center gap-2 text-indigo-400 text-xs font-bold uppercase tracking-wider mb-2">
               <Sparkles className="w-4 h-4" />
-              <span>Google Gemini AI Remediation Suite</span>
+              <span>Google Gemma 4 AI Remediation Suite</span>
             </div>
             <h2 className="text-2xl font-extrabold tracking-tight">AI Fix Assistant</h2>
             <p className="text-sm text-slate-400 mt-1 max-w-2xl">
@@ -211,7 +211,7 @@ export default function AiFixAssistantPage({
               {loadingAi ? (
                 <div className="py-24 flex flex-col items-center justify-center text-center space-y-3">
                   <RefreshCw className="w-10 h-10 animate-spin text-indigo-400" />
-                  <p className="text-sm font-semibold text-slate-200">Generating Structured Gemini Remediation...</p>
+                  <p className="text-sm font-semibold text-slate-200">Generating Structured Gemma 4 Remediation...</p>
                   <p className="text-xs text-slate-400 max-w-sm">
                     Synthesizing disability impact, semantic HTML before/after snippets, and WCAG criteria.
                   </p>

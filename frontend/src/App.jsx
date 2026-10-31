@@ -18,7 +18,7 @@ function MainApp() {
   const { theme } = useTheme();
   const [activePage, setActivePage] = useState('dashboard');
   const [isMobileOpen, setIsMobileOpen] = useState(false);
-  const [selectedModel, setSelectedModel] = useState('gemini-2.5-flash');
+  const [selectedModel, setSelectedModel] = useState('gemma-4-26b-a4b-it');
   
   // Connection & Health status state machine
   const [connectionStatus, setConnectionStatus] = useState('connecting'); // 'connected' | 'disconnected' | 'connecting'
@@ -110,7 +110,7 @@ function MainApp() {
       }, 4000);
 
       const timer2 = setTimeout(() => {
-        setScanStatus('Awaiting axe results & executing Gemini AI remediation...');
+        setScanStatus('Awaiting axe results & executing Gemma 4 AI remediation...');
       }, 10000);
 
       const data = await api.scanWebsite(scanPayload);

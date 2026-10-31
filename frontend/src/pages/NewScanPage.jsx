@@ -226,7 +226,7 @@ export default function NewScanPage({
                 <span>AI Automated Remediation</span>
               </h3>
               <p className="text-xs text-slate-400 mb-4">
-                Google Gemini generates code fixes directly for discovered Axe violations.
+                Google Gemma 4 generates code fixes directly for discovered Axe violations.
               </p>
 
               <div className="space-y-4">
@@ -235,7 +235,7 @@ export default function NewScanPage({
                     ? 'bg-indigo-600/10 border-indigo-500/40 text-slate-200' 
                     : theme === 'dark' ? 'bg-slate-950 border-slate-800 text-slate-400' : 'bg-slate-50 border-slate-200 text-slate-600'
                 }`}>
-                  <span className="text-xs font-semibold">Enable Gemini Fix Engine</span>
+                  <span className="text-xs font-semibold">Enable Gemma 4 Fix Engine</span>
                   <input
                     type="checkbox"
                     checked={enableAI}
@@ -249,20 +249,13 @@ export default function NewScanPage({
                   <label className="block text-xs font-semibold text-slate-400 mb-2">
                     Configured Model
                   </label>
-                  <select
-                    value={selectedModel}
-                    onChange={(e) => setSelectedModel(e.target.value)}
-                    disabled={loading}
-                    className={`w-full rounded-xl px-4 py-3 text-xs border focus:outline-none focus:ring-2 focus:ring-indigo-500 ${
-                      theme === 'dark' 
-                        ? 'bg-slate-950 border-slate-800 text-white' 
-                        : 'bg-slate-50 border-slate-300 text-slate-800'
-                    }`}
-                  >
-                    <option value="gemma-4-26b-a4b-it">Gemma 4 (26B Open Model)</option>
-                    <option value="gemini-2.5-flash">Gemini 2.5 Flash</option>
-                    <option value="gemini-1.5-pro">Gemini 1.5 Pro</option>
-                  </select>
+                  <div className={`w-full rounded-xl px-4 py-3 text-xs border font-medium ${
+                    theme === 'dark' 
+                      ? 'bg-slate-950 border-slate-800 text-white' 
+                      : 'bg-slate-50 border-slate-300 text-slate-800'
+                  }`}>
+                    Gemma 4 (gemma-4-26b-a4b-it)
+                  </div>
                 </div>
 
                 {/* Content Quality & Spell Checker Options */}

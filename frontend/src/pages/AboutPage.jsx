@@ -51,7 +51,7 @@ export default function AboutPage() {
         <p className="text-sm text-slate-300 leading-relaxed max-w-2xl">
           AccessCheck AI is engineered to automate and demystify WCAG 2.1 Level AA web accessibility compliance. 
           By combining headless Chromium automation through Playwright with Deque's trusted Axe-core engine and 
-          Google Gemini's code generation, developers receive immediate, verified remediation solutions.
+          Google Gemma 4's code generation, developers receive immediate, verified remediation solutions.
         </p>
       </div>
 
@@ -63,7 +63,7 @@ export default function AboutPage() {
             { title: "Frontend Architecture", desc: "React + Vite, Tailwind CSS, Recharts, Plotly.js, Lucide Icons", icon: Globe },
             { title: "Backend Engine", desc: "FastAPI, Uvicorn, Pydantic, Python AsyncIO", icon: Cpu },
             { title: "Auditing Core", desc: "Playwright Chromium + Deque Axe-core (WCAG 2.1 AA)", icon: ShieldCheck },
-            { title: "AI Remediation", desc: "Google GenAI SDK (Gemini 2.5 Flash, 1.5 Pro, Gemma 2)", icon: Code2 },
+            { title: "AI Remediation", desc: "Google GenAI SDK (Gemma 4 26B A4B IT)", icon: Code2 },
             { title: "Persistence Layer", desc: "SQLite via aiosqlite asynchronous driver", icon: Layers },
             { title: "Architecture Mapping", desc: "Graphify System Topology & Artifact Tracker", icon: GitBranch },
           ].map((item, idx) => {

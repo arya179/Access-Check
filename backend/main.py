@@ -47,7 +47,7 @@ async def lifespan(app: FastAPI):
 
 app = FastAPI(
     title="AccessCheck AI API",
-    description="Enterprise website accessibility auditing platform using Google Chrome, Axe-core, and Google Gemini.",
+    description="Enterprise website accessibility & content quality auditing platform using Google Chrome, Axe-core, and Google Gemma 4.",
     version="2.0.0",
     lifespan=lifespan
 )
@@ -133,7 +133,8 @@ async def health_check():
         "version": "2.0.0",
         "database_connected": db_ok,
         "environment": settings.ENVIRONMENT,
-        "gemini_model": settings.GEMINI_MODEL,
+        "ai_provider": "Google Gen AI API",
+        "gemma_model": settings.GEMMA_MODEL,
         "ai_enabled": bool(settings.GEMINI_API_KEY)
     }
 

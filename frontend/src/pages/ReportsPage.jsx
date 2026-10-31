@@ -210,7 +210,7 @@ ${violations.map((v, i) => `${i + 1}. [${v.impact?.toUpperCase()}] ${v.id}: ${v.
           <div className="py-6 border-b border-inherit">
             <span className="text-xs font-bold uppercase tracking-wider text-indigo-400 flex items-center gap-1.5 mb-2">
               <Sparkles className="w-4 h-4" />
-              <span>Google Gemini AI Executive Evaluation:</span>
+              <span>Google Gemma 4 AI Executive Evaluation:</span>
             </span>
             <p className="text-xs text-slate-300 leading-relaxed bg-slate-950 p-4 rounded-2xl border border-indigo-950/60 font-mono">
               {ai_summary}
@@ -261,7 +261,7 @@ ${violations.map((v, i) => `${i + 1}. [${v.impact?.toUpperCase()}] ${v.id}: ${v.
         <div className="pt-4 border-t border-inherit flex items-start gap-2.5 text-[11px] text-slate-500 leading-relaxed">
           <Info className="w-4 h-4 text-slate-400 shrink-0 mt-0.5" />
           <span>
-            This report represents automated compliance testing under axe-core and Google Gemini. 
+            This report represents automated compliance testing under axe-core and Google Gemma 4. 
             Automated tools discover 30% - 50% of WCAG barriers. 
             Passing automated checks does not constitute official legal compliance certification.
           </span>

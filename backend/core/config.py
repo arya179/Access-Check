@@ -11,9 +11,8 @@ class Settings:
         self.ENVIRONMENT: str = os.getenv("ENVIRONMENT", "development")
         self.FRONTEND_URL: str = os.getenv("FRONTEND_URL", "http://localhost:5173")
         
-        # AI Config
+        # AI Config - Gemma 4 is the single source of truth
         self.GEMINI_API_KEY: str = os.getenv("GEMINI_API_KEY") or os.getenv("GOOGLE_API_KEY") or ""
-        self.GEMINI_MODEL: str = os.getenv("GEMINI_MODEL", "gemini-2.5-flash")
         self.GEMMA_MODEL: str = os.getenv("GEMMA_MODEL", "gemma-4-26b-a4b-it")
         
         # Database

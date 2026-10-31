@@ -46,7 +46,7 @@ class GraphifyTracker:
             {"id": "Client", "group": "frontend", "label": "React Vite UI", "description": "Interactive Web Auditor & Dashboard"},
             {"id": "FastAPI", "group": "backend", "label": "FastAPI Gateway", "description": "Asynchronous REST API"},
             {"id": "AxeScanner", "group": "backend", "label": "Playwright + Axe Scanner", "description": "Real Chromium Headless Engine"},
-            {"id": "GeminiAI", "group": "ai", "label": "Google Gemini 2.5 Flash", "description": "Remediation & WCAG Code Generator"},
+            {"id": "GemmaAI", "group": "ai", "label": "Google Gemma 4 (gemma-4-26b-a4b-it)", "description": "Gemma 4 Remediation & WCAG Code Generator"},
             {"id": "PlotlyAnalytics", "group": "analytics", "label": "Plotly Engine", "description": "Interactive Visualization Data"},
             {"id": "SQLite", "group": "storage", "label": "SQLite Store", "description": "Persistent Audit Logs & Compliance Records"},
             {"id": "Graphify", "group": "tooling", "label": "Graphify Module", "description": "Codebase Architecture & Dependency Mapper"}
@@ -55,7 +55,7 @@ class GraphifyTracker:
         links = [
             {"source": "Client", "target": "FastAPI", "relationship": "POST /api/audit/scan"},
             {"source": "FastAPI", "target": "AxeScanner", "relationship": "dispatches URL"},
-            {"source": "AxeScanner", "target": "GeminiAI", "relationship": "sends Axe violations"},
+            {"source": "AxeScanner", "target": "GemmaAI", "relationship": "sends Axe violations"},
             {"source": "AxeScanner", "target": "PlotlyAnalytics", "relationship": "generates charts"},
             {"source": "FastAPI", "target": "SQLite", "relationship": "stores results"},
             {"source": "FastAPI", "target": "Graphify", "relationship": "reads project graph"}

@@ -14,7 +14,7 @@ logger = logging.getLogger("accesscheck.ai.service")
 
 class GemmaAIService:
     """
-    High-level AI feature orchestrator powered by Google GenAI (Gemma 4 & Gemini).
+    High-level AI feature orchestrator powered by Google GenAI (Gemma 4).
     Implements all required capabilities:
     A. Explain accessibility violations with structured fixes
     B. Generate HTML fixes
@@ -29,8 +29,8 @@ class GemmaAIService:
         self.client = ai_client
 
     def _get_target_model(self, override: Optional[str] = None) -> str:
-        # Default to Gemma 4 as specified in requirements
-        return override or settings.GEMMA_MODEL or "gemma-4-26b-a4b-it"
+        # Gemma 4 is the single source of truth - no fallback to Gemini
+        return settings.GEMMA_MODEL or "gemma-4-26b-a4b-it"
 
     def get_fallback_explanation(self, req: ExplainRequest) -> ExplainResponse:
         """Deterministic, authoritative documentation fallback."""
@@ -123,7 +123,7 @@ Return a valid JSON object matching this schema:
 }}
 """
         try:
-            parsed = await self.client.generate_json(prompt, model=model_name, timeout=25.0)
+            parsed = await self.client.generate_json(prompt, timeout=25.0)
             return ExplainResponse(
                 rule_id=req.rule_id,
                 issue_explanation=parsed.get("issue_explanation", f"Axe rule: {req.help}"),
@@ -162,7 +162,7 @@ Return a valid JSON object:
 }}
 """
         try:
-            parsed = await self.client.generate_json(prompt, model=model_name, timeout=20.0)
+            parsed = await self.client.generate_json(prompt, timeout=20.0)
             return AskQuestionResponse(
                 question=req.question,
                 answer=parsed.get("answer", "No answer generated."),
@@ -204,7 +204,7 @@ Return a valid JSON object:
 }}
 """
         try:
-            parsed = await self.client.generate_json(prompt, model=model_name, timeout=25.0)
+            parsed = await self.client.generate_json(prompt, timeout=25.0)
             return ChecklistResponse(
                 title=parsed.get("title", "Accessibility Remediation Checklist"),
                 summary=parsed.get("summary", "Prioritized checklist based on real scanner violations."),
@@ -253,7 +253,7 @@ Return a valid JSON object:
 }}
 """
         try:
-            parsed = await self.client.generate_json(prompt, model=model_name, timeout=20.0)
+            parsed = await self.client.generate_json(prompt, timeout=20.0)
             return CompareReportsResponse(
                 verdict=parsed.get("verdict", f"Score shifted by {delta:+d} points."),
                 score_delta=delta,

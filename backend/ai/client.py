@@ -8,53 +8,63 @@ from backend.core.config import settings
 
 logger = logging.getLogger("accesscheck.ai.client")
 
-class GenAIClient:
+class GemmaClient:
     """
-    Centralized, resilient client for Google Gemini and Gemma 4 AI interactions
+    Centralized, resilient client for Google Gen AI & Gemma 4 interactions
     using the official google-genai SDK.
 
     Capabilities:
-    - Configurable Gemma 4 model (GEMMA_MODEL=gemma-4-26b-a4b-it)
-    - Configurable Gemini model (GEMINI_MODEL=gemini-2.5-flash)
+    - Primary model: Gemma 4 (GEMMA_MODEL=gemma-4-26b-a4b-it) as single source of truth
     - Connection health check & real ping
-    - Timeout handling & limited retries
-    - Strict response validation
-    - Sanitized logging (zero secrets exposed)
+    - Strict timeout handling & limited retries
+    - Structured JSON response validation
+    - Sanitized logging (zero credentials/secrets printed)
     - Safe graceful fallback when API quota/keys are unavailable
+    - Scanned input sanitization to prevent prompt injection and data exfiltration
     """
     def __init__(self):
         self.api_key = settings.GEMINI_API_KEY
         self.gemma_model = settings.GEMMA_MODEL or "gemma-4-26b-a4b-it"
-        self.gemini_model = settings.GEMINI_MODEL or "gemini-2.5-flash"
         self.client: Optional[genai.Client] = None
+        self.last_successful_call_at: Optional[str] = None
+        self.last_api_status: str = "untested"
         self._init_client()
 
     def _init_client(self):
         if self.api_key:
             try:
                 self.client = genai.Client(api_key=self.api_key)
-                logger.info(f"GenAIClient initialized. Default Gemma model: {self.gemma_model}, Gemini: {self.gemini_model}")
+                logger.info(f"GemmaClient initialized. Primary model: {self.gemma_model}")
             except Exception as e:
                 logger.error(f"Failed to initialize google-genai Client: {str(e)}")
                 self.client = None
 
     def get_status(self) -> Dict[str, Any]:
-        """Returns sanitized status of the AI service."""
+        """Returns sanitized status of the Gemma 4 service without exposing keys."""
         return {
-            "enabled": bool(self.client and self.api_key),
-            "gemma_model": self.gemma_model,
-            "gemini_model": self.gemini_model,
+            "ai_provider": "Google Gen AI API",
+            "configured_model": self.gemma_model,
+            "has_credentials": bool(self.api_key),
             "client_ready": self.client is not None,
-            "has_credentials": bool(self.api_key)
+            "api_connection_status": self.last_api_status,
+            "last_successful_call": self.last_successful_call_at
         }
 
-    async def ping_model(self, model: Optional[str] = None) -> Dict[str, Any]:
-        """Performs a real lightweight connectivity check to verify model availability."""
-        target_model = model or self.gemma_model
-        if not self.client:
-            return {"status": "unavailable", "model": target_model, "error": "Client not initialized or API key missing."}
+    async def ping_model(self) -> Dict[str, Any]:
+        """Performs a real lightweight connectivity check to verify Gemma 4 availability."""
+        target_model = self.gemma_model
+        if not self.client or not self.api_key:
+            self.last_api_status = "unavailable"
+            return {
+                "ai_provider": "Google Gen AI API",
+                "configured_model": target_model,
+                "status": "unavailable",
+                "connected": False,
+                "error": "Client not initialized or GEMINI_API_KEY missing."
+            }
 
         try:
+            from datetime import datetime, timezone
             loop = asyncio.get_event_loop()
             res = await asyncio.wait_for(
                 loop.run_in_executor(
@@ -64,29 +74,44 @@ class GenAIClient:
                         contents="Respond with 'PONG' only."
                     )
                 ),
-                timeout=10.0
+                timeout=12.0
             )
-            return {"status": "available", "model": target_model, "sample_reply": res.text.strip()[:30]}
+            self.last_api_status = "connected"
+            self.last_successful_call_at = datetime.now(timezone.utc).isoformat()
+            return {
+                "ai_provider": "Google Gen AI API",
+                "configured_model": target_model,
+                "status": "connected",
+                "connected": True,
+                "sample_reply": res.text.strip()[:30] if res and res.text else "OK"
+            }
         except Exception as e:
-            logger.warning(f"AI ping failed for model {target_model}: {str(e)}")
-            return {"status": "error", "model": target_model, "error": str(e)}
+            self.last_api_status = "error"
+            logger.warning(f"Gemma 4 ping failed for model {target_model}: {str(e)}")
+            return {
+                "ai_provider": "Google Gen AI API",
+                "configured_model": target_model,
+                "status": "error",
+                "connected": False,
+                "error": str(e)
+            }
 
     async def generate_text(
         self,
         prompt: str,
-        model: Optional[str] = None,
         timeout: float = 35.0,
         max_retries: int = 2
     ) -> str:
-        """Executes a text prompt with timeout and limited retries."""
-        if not self.client:
-            raise RuntimeError("GenAI client is not configured with an API key.")
+        """Executes a text prompt using Gemma 4 with timeout and limited retries."""
+        if not self.client or not self.api_key:
+            raise RuntimeError("Gemma 4 client is not configured with an API key.")
 
-        target_model = model or self.gemma_model
+        target_model = self.gemma_model
         last_error = None
 
         for attempt in range(max_retries):
             try:
+                from datetime import datetime, timezone
                 loop = asyncio.get_event_loop()
                 response = await asyncio.wait_for(
                     loop.run_in_executor(
@@ -99,11 +124,13 @@ class GenAIClient:
                     timeout=timeout
                 )
                 if response and response.text:
+                    self.last_api_status = "connected"
+                    self.last_successful_call_at = datetime.now(timezone.utc).isoformat()
                     return response.text.strip()
-                raise ValueError("Received empty response from AI model.")
+                raise ValueError("Received empty response from Gemma 4 model.")
             except Exception as e:
                 last_error = e
-                logger.warning(f"AI generation attempt {attempt + 1}/{max_retries} failed for {target_model}: {str(e)}")
+                logger.warning(f"Gemma 4 attempt {attempt + 1}/{max_retries} failed for {target_model}: {str(e)}")
                 if attempt < max_retries - 1:
                     await asyncio.sleep(1.0)
 
@@ -112,14 +139,12 @@ class GenAIClient:
     async def generate_json(
         self,
         prompt: str,
-        model: Optional[str] = None,
         timeout: float = 35.0,
         max_retries: int = 2
     ) -> Dict[str, Any]:
-        """Generates and validates structured JSON response."""
-        raw_text = await self.generate_text(prompt, model=model, timeout=timeout, max_retries=max_retries)
+        """Generates and validates structured JSON response strictly with Gemma 4."""
+        raw_text = await self.generate_text(prompt, timeout=timeout, max_retries=max_retries)
         
-        # Clean markdown code block wraps if model wraps in ```json ... ```
         clean_text = raw_text
         if "```json" in clean_text:
             clean_text = clean_text.split("```json")[1].split("```")[0].strip()
@@ -129,23 +154,21 @@ class GenAIClient:
         try:
             return json.loads(clean_text)
         except json.JSONDecodeError as jde:
-            logger.error(f"JSON validation error from AI: {jde}\nRaw output: {raw_text[:200]}")
-            raise ValueError(f"AI returned invalid JSON syntax: {jde}")
+            logger.error(f"JSON validation error from Gemma 4: {jde}\nRaw output: {raw_text[:200]}")
+            raise ValueError(f"Gemma 4 returned invalid JSON syntax: {jde}")
 
     async def analyze_screenshot(
         self,
         screenshot_bytes: bytes,
-        axe_summary: Dict[str, Any],
-        model: Optional[str] = None
+        axe_summary: Dict[str, Any]
     ) -> Dict[str, Any]:
         """
-        Multimodal visual analysis of a webpage screenshot using Gemini/Gemma multimodal models.
-        User must have explicitly enabled visual AI analysis.
+        Multimodal visual analysis of a webpage screenshot using Gemma 4 multimodal capabilities.
         """
-        if not self.client:
-            raise RuntimeError("GenAI client is not configured with an API key.")
+        if not self.client or not self.api_key:
+            raise RuntimeError("Gemma 4 client is not configured with an API key.")
 
-        target_model = model or self.gemini_model or "gemini-2.5-flash"
+        target_model = self.gemma_model
 
         prompt = f"""You are a certified accessibility specialist (CPACC/WAS).
 Analyze this webpage screenshot along with actual axe-core scanner findings:
@@ -178,6 +201,7 @@ Return a structured JSON object:
             mime_type="image/png"
         )
 
+        from datetime import datetime, timezone
         loop = asyncio.get_event_loop()
         response = await asyncio.wait_for(
             loop.run_in_executor(
@@ -187,8 +211,11 @@ Return a structured JSON object:
                     contents=[prompt, image_part]
                 )
             ),
-            timeout=30.0
+            timeout=35.0
         )
+
+        self.last_api_status = "connected"
+        self.last_successful_call_at = datetime.now(timezone.utc).isoformat()
 
         clean = response.text.strip()
         if "```json" in clean:
@@ -198,4 +225,4 @@ Return a structured JSON object:
 
         return json.loads(clean)
 
-ai_client = GenAIClient()
+ai_client = GemmaClient()
